@@ -37,4 +37,8 @@ fun makeFish() {
 fun main() {
     buildAquarium()
     makeFish()
+
+    val scientific = hashMapOf("guppy" to "poecilia reticulata", "catfish" to "corydoras", "zebra fish" to "danio rerio" )
+    println(scientific.get("guppy"))
+
 }
