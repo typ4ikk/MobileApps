@@ -6,14 +6,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -23,52 +28,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.businesscard.ui.theme.Lab4Theme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             Lab4Theme {
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color = Color(0xFF3ddc84))
-                ) {
-                    BusinessCard(
-                        fullName = "Aleksandr Oralov",
-                        title = "МГТУ им Г.И.Носова",
-                        phoneNumber = "+7 717 777 1717",
-                        firstEmail = "Burmaldushka1@gmail.com",
-                        secondEmail = "Burmaldyshka2@max.ru")
-                }
+                BusinessCard(
+                    fullName = "Александр Оралов",
+                    title = "МГТУ им Г.И.Носова",
+                    phoneNumber = "+7 717 777 1717",
+                    firstEmail = "Burmaldushka1@gmail.com",
+                    secondEmail = "Burmaldyshka2@max.ru")
+
             }
         }
     }
 }
 
-@Composable
-fun PersonInformationText(
-    fullName: String,
-    title: String,
-    modifier: Modifier = Modifier
-    ) {
-    Column(modifier) {
-        Text(
-            text = fullName,
-            fontSize = 24.sp,
-            lineHeight = 20.sp,
-            textAlign = TextAlign.Justify,
-            modifier = Modifier.padding(16.dp)
-        )
-        Text(
-            text = title,
-            fontSize = 24.sp,
-            lineHeight = 20.sp,
-            textAlign = TextAlign.Justify,
-            modifier = Modifier.padding(16.dp)
-        )
-    }
-}
 @Composable
 fun PersonInformation(
     fullName: String,
@@ -76,12 +54,29 @@ fun PersonInformation(
     modifier: Modifier = Modifier
 ) {
     val image = painterResource(R.drawable.android_logo)
-    Column(modifier) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = image,
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier
+                .background(color = Color(0xFF073042))
+                .size(120.dp, 120.dp)
+                .align(Alignment.CenterHorizontally)
         )
-        PersonInformationText(fullName, title)
+        Text(
+            text = fullName,
+            fontSize = 36.sp,
+            lineHeight = 20.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(16.dp),
+        )
+        Text(
+            text = title,
+            fontSize = 24.sp,
+            lineHeight = 16.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
 
@@ -92,49 +87,62 @@ fun ContactInformation(
     secondEmail: String,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
-        Row(modifier) {
+    Column(modifier, horizontalAlignment = Alignment.Start) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            //horizontalArrangement = Arrangement.Center
+        ) {
             Icon(
                 painter = painterResource(R.drawable.contact_phone_24dp_e3e3e3),
-                contentDescription = null)
+                contentDescription = null,
+                modifier = Modifier
+                    .size(40.dp,40.dp)
+
+            )
+            Spacer(modifier = Modifier.width(16.dp))
             Text(
                 text = phoneNumber,
                 fontSize = 20.sp,
                 lineHeight = 20.sp,
-                textAlign = TextAlign.Justify,
-                modifier = Modifier.padding(8.dp)
             )
-            Row(modifier) {
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.mail_24dp_e3e3e3),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(40.dp,40.dp)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = firstEmail,
+                fontSize = 20.sp,
+                lineHeight = 20.sp,
+            )
+        }
+        if (secondEmail.isNotEmpty()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Icon(
                     painter = painterResource(R.drawable.mail_24dp_e3e3e3),
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(40.dp,40.dp)
                 )
+                Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = firstEmail,
+                    text = secondEmail,
                     fontSize = 20.sp,
                     lineHeight = 20.sp,
-                    textAlign = TextAlign.Justify,
-                    modifier = Modifier.padding(8.dp)
                 )
-            }
-            if (secondEmail.isNotEmpty()) {
-                Row(modifier) {
-                    Icon(
-                        painter = painterResource(R.drawable.mail_24dp_e3e3e3),
-                        contentDescription = null
-                    )
-                    Text(
-                        text = secondEmail,
-                        fontSize = 20.sp,
-                        lineHeight = 20.sp,
-                        textAlign = TextAlign.Justify,
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
             }
         }
     }
 }
+
 @Composable
 fun BusinessCard(
     fullName: String,
@@ -144,20 +152,52 @@ fun BusinessCard(
     secondEmail: String,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
-        PersonInformation(fullName, title, modifier)
-        ContactInformation(phoneNumber, firstEmail, secondEmail)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFFd2e8d4)),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            PersonInformation(
+                fullName = fullName,
+                title = title,
+                modifier = Modifier
+            )
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            ContactInformation(
+                phoneNumber = phoneNumber,
+                firstEmail = firstEmail,
+                secondEmail = secondEmail,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp)
+                    .padding(horizontal = 16.dp)
+            )
+        }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun BusinessCardPreview() {
     Lab4Theme {
         BusinessCard(
-            fullName = "Aleksandr Oralov",
+            fullName = "Александр Оралов",
             title = "МГТУ им Г.И.Носова",
             phoneNumber = "+7 717 777 1717",
             firstEmail = "Burmaldushka1@gmail.com",
-            secondEmail = "Burmaldyshka2@max.ru")
+            secondEmail = "Burmaldyshka2@max.ru",
+            modifier = Modifier.background(color = Color(0xFFd2e8d4)))
     }
 }

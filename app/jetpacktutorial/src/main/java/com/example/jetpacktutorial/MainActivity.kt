@@ -85,7 +85,7 @@ fun TutorialImage(
         Image(
             painter = image,
             contentDescription = null,
-            //contentScale = ContentScale.Crop
+
         )
         TutorialText(
             titleText = titleText,
